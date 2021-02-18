@@ -9,5 +9,6 @@ files/samytools/conv
 files/samytools/b64
 files/samytools/aes
 files/samytools/timer
+files/samytools/unpack
 files/flac2mp3
 files/pakg
