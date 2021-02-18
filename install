@@ -1,0 +1,36 @@
+#!/bin/bash
+
+defaultbinpath="$HOME/bin"
+binpath="${1:-$defaultbinpath}"
+filename="install.lst"
+gud="✅"
+bad="❌"
+wat="⚠"
+continue=""
+
+if echo "$PATH" | grep -q "$binpath"
+then
+    printf "$gud Specified binpath=$binpath exists in PATH, continuing...\n\n";
+else
+    printf "$bad Specified binpath=$binpath does not exist in PATH, add '$binpath' to PATH before proceeding.\n\n"; exit $ERRCODE;
+fi
+
+printf "$wat Warning: this script will destructively copy over scripts in $filename to $binpath, continue? [y/n] \n\n";
+read -r continue
+printf "\n"
+
+if [ "$continue" = "y" ] || [ "$continue" = "Y" ]
+then
+    printf "Adding the following scripts to $binpath:\n"
+    while IFS= read -r line || [ -n "$line" ]; do
+        dest="$binpath/${line##*/}"
+        file="$PWD/$line"
+
+        printf "* $line\n"
+        rm -f "$dest"
+        ln -s "$file" "$dest"
+    done < "$filename"
+    printf "\n$gud Finished!\n"
+else
+    printf "Bye!\n"
+fi

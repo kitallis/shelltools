@@ -1,0 +1,3 @@
+[submodule "samytools"]
+	path = samytools
+	url = git@github.com:samyk/samytools.git

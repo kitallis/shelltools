@@ -1,0 +1,58 @@
+#!/bin/sh
+if [ -z "$1" ]
+then
+    echo "Usage: pakg <i(nstall)|r(emove)|s(earch)|u(pdate)|l(ist)>"
+else
+    os=$([[ -f /etc/os-release ]] && grep ^ID= /etc/os-release | cut -d = -f 2 || uname)
+    echo --------------------- "$os" --------------------
+    command=$1
+    shift
+    case $os in
+	      debian|Ubuntu)
+	          case $command in
+		            i)
+		                sudo apt-get install "$@"
+		                ;;
+		            r)
+		                sudo apt-get remove "$@"
+		                ;;
+		            s)
+		                apt-cache search "$@"
+		                ;;
+		            u)
+		                sudo apt-get update && sudo apt-get upgrade
+		                ;;
+		            l)
+		                sudo apt list --installed
+		                ;;
+		            c)
+		                sudo apt-get autoremove
+		                ;;
+	          esac
+	          ;;
+	      darwin*|Darwin*)
+	          case $command in
+		            i)
+		                brew install "$@"
+		                ;;
+		            r)
+		                brew remove "$@"
+		                ;;
+		            s)
+		                brew search "$@"
+		                ;;
+		            u)
+		                brew update
+		                ;;
+		            l)
+		                brew list
+		                ;;
+		            c)
+		                brew cleanup
+		                ;;
+	          esac
+	          ;;
+	      *)
+	          echo "Unknown OS. Please add it to $(basename "$0") pakg function"
+    esac
+fi

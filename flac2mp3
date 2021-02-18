@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+for f in *.flac; do
+  flac2mp3 "$f" v0 && rm "$f" 
+done
